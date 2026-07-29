@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Asterbin-XDecomposer：多相 XRD 分解、结构检索与 API 使用文档。">
+  <title>Asterbin-XDecomposer · XRD 多相分解</title>
+  <style>
+    :root { --ink:#17212b; --muted:#5d6b78; --line:#dce4ea; --paper:#fff; --canvas:#f5f8fa; --brand:#0c6b66; --navy:#12334a; --gold:#e6a42e; }
+    * { box-sizing:border-box; } html { scroll-behavior:smooth; } body { margin:0; color:var(--ink); background:radial-gradient(circle at 85% 20%,#def4ef 0,transparent 27rem),var(--canvas); font:16px/1.7 Inter, ui-sans-serif, system-ui, -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; }
+    a { color:var(--brand); } a:hover { color:#064e4a; } .hero { isolation:isolate; position:relative; overflow:hidden; background:linear-gradient(125deg,#0d2c42,#08736b 55%,#0d4e70); color:#fff; padding:76px max(24px,calc((100% - 1120px)/2)); }.hero::before,.hero::after { position:absolute; z-index:-1; width:38rem; height:38rem; border-radius:50%; content:""; filter:blur(2px); opacity:.5; }.hero::before { top:-25rem; right:-8rem; background:radial-gradient(circle,#89f1df 0,transparent 64%); animation:drift 15s ease-in-out infinite alternate; }.hero::after { bottom:-29rem; left:14%; background:radial-gradient(circle,#56a8d1 0,transparent 62%); animation:drift 20s ease-in-out -6s infinite alternate-reverse; }.hero-inner { position:relative; max-width:900px; }.eyebrow { margin:0 0 12px; font-size:.82rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:#8fe0d5; }.hero h1 { max-width:850px; margin:0; font-size:clamp(2.2rem,5vw,4.4rem); line-height:1.1; letter-spacing:-.04em; text-wrap:balance; }.hero p { max-width:740px; margin:22px 0 0; color:#d9ecea; font-size:1.12rem; }
+    .author { display:inline-flex; align-items:center; gap:9px; margin-top:24px; padding:7px 11px 7px 8px; border:1px solid #ffffff3b; border-radius:999px; background:#062d3b42; color:#ebfffc; font-size:.9rem; text-decoration:none; transition:transform .2s,background .2s; }.author:hover { transform:translateY(-2px); background:#ffffff1e; color:#fff; }.avatar { display:grid; width:28px; height:28px; place-items:center; border-radius:50%; background:linear-gradient(135deg,#ffe3a1,#e2a42f); color:#45310d; font-weight:800; font-size:.75rem; }
+    .actions { display:flex; flex-wrap:wrap; gap:12px; margin-top:28px; }.button { display:inline-block; padding:9px 16px; border:1px solid #93d8d0; border-radius:7px; color:#fff; font-weight:700; text-decoration:none; transition:transform .2s,box-shadow .2s,background .2s; }.button:hover { transform:translateY(-2px); color:#fff; box-shadow:0 10px 24px #001d2a40; background:#ffffff1d; }.button.primary { background:#fff; color:#075e5a; border-color:#fff; }.button.primary:hover { color:#064e4a; background:#eafff9; }
+    .shell { display:grid; grid-template-columns:220px minmax(0,860px); gap:42px; width:min(1120px,calc(100% - 48px)); margin:0 auto; padding:42px 0 72px; }.toc { align-self:start; position:sticky; top:20px; padding:16px 0; }.toc b { display:block; margin-bottom:8px; font-size:.82rem; color:var(--muted); letter-spacing:.08em; }.toc a { display:block; padding:5px 0; color:var(--muted); text-decoration:none; }.toc a:hover { color:var(--brand); }
+    main { min-width:0; }.notice { padding:16px 19px; border-left:4px solid var(--gold); background:#fff8e9; }.card { margin:26px 0; padding:28px; background:var(--paper); border:1px solid var(--line); border-radius:10px; box-shadow:0 2px 8px #1531470a; transition:transform .25s,box-shadow .25s; }.card:hover { transform:translateY(-2px); box-shadow:0 14px 30px #15314712; }.card h2 { margin:0 0 15px; font-size:1.55rem; letter-spacing:-.025em; }.card h3 { margin:25px 0 8px; font-size:1.08rem; }.card p:first-of-type { margin-top:0; } .grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }.stat { padding:16px; background:#f0f7f6; border-radius:7px; transition:transform .2s; }.stat:hover { transform:translateY(-3px); }.stat strong { display:block; color:var(--brand); font-size:1.4rem; }.stat span { color:var(--muted); font-size:.9rem; }
+    .flow { display:grid; grid-template-columns:repeat(5,1fr); align-items:center; gap:8px; margin:20px 0; text-align:center; }.node { padding:13px 8px; border:1px solid #abd4cf; border-radius:7px; background:#f5fbfa; font-size:.9rem; font-weight:700; box-shadow:0 3px 10px #0c6b660d; animation:pulse 4s ease-in-out infinite; }.node:nth-child(3) { animation-delay:.55s; }.node:nth-child(5) { animation-delay:1.1s; }.node:nth-child(7) { animation-delay:1.65s; }.node:nth-child(9) { animation-delay:2.2s; }.arrow { color:var(--brand); font-size:1.5rem; animation:arrow 2.4s ease-in-out infinite; }.diagram { padding:22px; overflow:auto; border-radius:8px; background:#102a3d; color:#d9edf0; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; line-height:1.5; white-space:pre; box-shadow:inset 0 1px #ffffff15; }
+    code { padding:.1em .35em; border-radius:4px; background:#edf2f5; color:#143f58; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:.88em; } pre { overflow:auto; margin:14px 0; padding:17px; border-radius:8px; background:#102a3d; color:#e9f4f5; line-height:1.55; } pre code { padding:0; color:inherit; background:transparent; font-size:.88rem; } table { width:100%; border-collapse:collapse; font-size:.94rem; } th,td { padding:10px; border-bottom:1px solid var(--line); text-align:left; vertical-align:top; } th { color:var(--muted); font-weight:700; } ul { padding-left:21px; }.tag { display:inline-block; padding:2px 8px; border-radius:999px; background:#e8f4f2; color:#08716b; font-size:.78rem; font-weight:700; } .muted { color:var(--muted); } footer { padding:30px 24px; background:#102a3d; color:#d0e0e2; text-align:center; font-size:.9rem; }
+    .js .reveal { opacity:0; transform:translateY(20px); transition:opacity .65s ease,transform .65s ease; }.js .reveal.visible { opacity:1; transform:none; } @keyframes drift { to { transform:translate3d(-4rem,5rem,0) scale(1.15); } } @keyframes pulse { 50% { border-color:#4ac2b6; box-shadow:0 6px 18px #0c6b6622; transform:translateY(-3px); } } @keyframes arrow { 50% { color:#e6a42e; transform:translateX(4px); } }
+    @media (prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto!important; animation-duration:.01ms!important; animation-iteration-count:1!important; transition-duration:.01ms!important; } }.skip { position:absolute; top:-4rem; left:1rem; z-index:4; padding:8px 12px; background:#fff; border-radius:5px; }.skip:focus { top:1rem; } @media (max-width:800px) { .shell { display:block; width:min(100% - 32px,860px); }.toc { position:static; display:flex; flex-wrap:wrap; gap:0 14px; }.toc b { width:100%; }.toc a { font-size:.88rem; }.grid { grid-template-columns:1fr; }.flow { grid-template-columns:1fr; }.arrow { transform:rotate(90deg); }.hero { padding:54px 24px; } }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#overview">跳至正文</a>
+  <header class="hero">
+    <a href="en.html" style="position:absolute;right:24px;top:20px;color:#fff;font-weight:700">English</a>
+    <div class="hero-inner">
+      <p class="eyebrow">Asterbin-XDecomposer · Documentation</p>
+      <h1>从混合 XRD 到相分解与 Materials Project 结构候选</h1>
+      <p>面向多相粉末 X 射线衍射的端到端分解模型：输入一条混合衍射谱，输出相级 XRD、相存在概率，以及在 MP500 结构库中的最相似 <code>mp-id</code>。</p>
+      <a class="author" href="https://bin-cao.github.io/" target="_blank" rel="noreferrer"><span class="avatar">BC</span><span>Author · Bin Cao <span aria-hidden="true">↗</span></span></a>
+      <div class="actions">
+        <a class="button primary" href="https://github.com/Asterbin/Asterbin-XDecomposer/releases">下载权重与 MP500.db</a>
+        <a class="button" href="https://github.com/Asterbin/Asterbin-XDecomposer">查看代码仓库</a>
+        <a class="button" href="https://github.com/Licht0812/XDecomposer">上游 XDecomposer</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="shell">
+    <nav class="toc" aria-label="目录"><b>目录</b>
+      <a href="#overview">项目概览</a><a href="#assets">下载与放置文件</a><a href="#architecture">模型架构</a><a href="#training">训练流程</a><a href="#api">API 推理</a><a href="#response">返回结果</a><a href="#limitations">使用边界</a>
+    </nav>
+    <main>
+      <section id="overview" class="card reveal">
+        <h2>项目概览</h2>
+        <p><strong>Asterbin-XDecomposer</strong> 是从 <a href="https://github.com/Licht0812/XDecomposer">Licht0812/XDecomposer</a> fork 而来，并在此仓库中补充了可部署的 FastAPI 推理接口、基于 <code>MP500.db</code> 的结构检索流程及本说明页面。上游项目的目标是对整条多相 XRD 图谱进行盲源分解，而非仅做峰位搜索或物相分类。</p>
+        <div class="grid">
+          <div class="stat"><strong>3500</strong><span>默认统一 XRD 采样长度</span></div>
+          <div class="stat"><strong>最多 4 相</strong><span>当前发布分解 checkpoint 的输出槽位数</span></div>
+          <div class="stat"><strong>MP500</strong><span>用于候选结构检索的 ASE 数据库</span></div>
+        </div>
+        <p class="notice"><strong>工作流：</strong>模型先预测每一个相的分解曲线；随后 API 将曲线与 <code>MP500.db</code> 中结构计算得到的理论 XRD 做余弦相似度检索。因此 <code>mp-id</code> 是当前候选库中的匹配结果，不是模型直接生成的晶体结构。</p>
+      </section>
+
+      <section id="assets" class="card reveal">
+        <h2>下载模型权重与结构库</h2>
+        <p>分解 API 需要两个 checkpoint 与一个材料数据库。它们已发布在 <a href="https://github.com/Asterbin/Asterbin-XDecomposer/releases">Asterbin-XDecomposer Releases</a>。下载后在仓库根目录保留以下相对路径；当前仓库中的目录名为 <code> checkpoints</code>（注意前导空格）。</p>
+        <pre><code>Asterbin-XDecomposer/
+├──  checkpoints/
+│   ├── pretrain/best_model.pt       # MAE 预训练配置/编码器权重
+│   └── sepration/latest.pt          # 多相分解模型权重
+├── MP500.db                         # 含 mpid 的候选晶体结构库
+└── api/main.py                      # FastAPI 服务</code></pre>
+        <p>也可不使用默认位置，而是通过环境变量指定绝对路径：</p>
+        <pre><code>export XDECOMPOSER_CHECKPOINT=/data/latest.pt
+export XDECOMPOSER_MAE_CHECKPOINT=/data/best_model.pt
+export XDECOMPOSER_MATERIALS_DB=/data/MP500.db</code></pre>
+        <p class="muted">启动时会对候选结构计算 Cu Kα 理论谱并构建检索参考库。API 默认使用 500 条结构（<code>XDECOMPOSER_MAX_REFERENCES=500</code>）并缓存结果；提高该值会明显增加启动时间与内存占用。</p>
+      </section>
+
+      <section id="architecture" class="card reveal">
+        <h2>模型架构</h2>
+        <p>分解网络由一维卷积编码/解码器、从 MAE 初始化的 Transformer，以及相查询（phase query）和 FiLM 调制组成。当前发布配置以 4 个输出槽位为例，每个槽位对应一个可能存在的物相。</p>
+        <div class="flow" aria-label="模型数据流"><div class="node">混合 XRD<br><small>[B, 1, 3500]</small></div><div class="arrow">→</div><div class="node">CNN 编码器<br><small>多尺度谱特征</small></div><div class="arrow">→</div><div class="node">Transformer +<br>Phase Queries</div><div class="arrow">→</div><div class="node">FiLM / 掩码<br>解码器</div><div class="arrow">→</div><div class="node">K 条相级 XRD<br>+ activity</div></div>
+        <div class="diagram" role="img" aria-label="架构简图">mixture XRD
+    │
+    ├── 1D CNN encoder ──► token sequence ──► pretrained Transformer
+    │                                              │
+    │                                  K learned phase queries
+    │                                              │
+    │                                  activity logits + FiLM γ, β
+    │                                              │
+    └────────────────────── mask / skip decoder ◄─┘
+                                                   │
+                               K separated patterns [B, K, 3500]</div>
+        <h3>组件职责</h3>
+        <table><thead><tr><th>组件</th><th>作用</th></tr></thead><tbody>
+          <tr><td>Masked Autoencoder（MAE）</td><td>在单相谱上学习局部峰形与全局衍射上下文；编码器包含 patch embedding 和 4 层 Transformer。</td></tr>
+          <tr><td>1D CNN 编码器/解码器</td><td>提取并还原连续衍射信号。解码时使用 skip connections 保留峰形细节。</td></tr>
+          <tr><td>PhaseQueryHead</td><td>用 K 个可学习 query 从共享特征中取出 K 个潜在物相，同时产生每相 activity logit。</td></tr>
+          <tr><td>FiLM</td><td>由 query 生成 γ、β，对 token 表征进行条件调制，使不同相获得不同的特征通道。</td></tr>
+          <tr><td>Soft mask 输出</td><td>解码器预测相掩码，再与输入混合谱相乘，以保持输出与原始谱的物理支持区域一致。</td></tr>
+        </tbody></table>
+      </section>
+
+      <section id="training" class="card reveal">
+        <h2>模型训练</h2>
+        <h3>阶段一：单相 MAE 预训练</h3>
+        <p>训练数据为单相 XRD。输入谱被切为长度 50、步长 25 的重叠 patch，随机掩蔽约 70% patch，模型从未掩蔽上下文重建它们。训练损失由峰强度加权 L1、余弦相似度和一阶导数一致性组成，使模型同时学习峰强、谱形及峰边缘。</p>
+        <pre><code>conda create -n xdecomposer python=3.10
+conda activate xdecomposer
+pip install -r requirements.txt
+
+# 先修改 configs/paths.sh 中 PATH_DATA_SINGLEPHASE
+bash scripts/bash_train/run_pretrain.sh</code></pre>
+        <h3>阶段二：在线混合与多相分解</h3>
+        <p><code>OnlineMixingDataset</code> 从单相库采样 2–4 个相，使用随机权重在线合成混合谱。分解模型不固定输出槽位与真实相的顺序，因此采用 permutation-invariant training（PIT）：在所有输出/目标排列中选取损失最小的匹配。</p>
+        <ul><li><strong>相级重建：</strong>峰强度加权 L1；</li><li><strong>分离质量：</strong>SI-SDR 项；</li><li><strong>几何约束：</strong>在平方根强度空间的一、二阶梯度损失；</li><li><strong>混合一致性：</strong>按混合权重加总的预测谱应接近输入混合谱；</li><li><strong>Activity：</strong>用每个槽位是否含真实相监督相存在概率。</li></ul>
+        <pre><code># 需要先完成 MAE 预训练，或在 paths.sh 配好 PATH_CKPT_PRETRAIN
+bash scripts/bash_train/run_xdecomposer.sh --gpus 0,1 --name main</code></pre>
+        <p>训练脚本支持 DDP、多 GPU、断点续训与余弦学习率调度。常用路径、数据集位置和 checkpoint 位置集中在 <code>configs/paths.sh</code>。</p>
+      </section>
+
+      <section id="api" class="card reveal">
+        <h2>API：输入 XRD，返回 mp-id</h2>
+        <p>API 文件为 <code>api/main.py</code>。安装依赖并在项目根目录启动：</p>
+        <pre><code>pip install -r requirements.txt
+uvicorn api.main:app --host 0.0.0.0 --port 8000</code></pre>
+        <p>打开 <a href="http://127.0.0.1:8000/docs">http://127.0.0.1:8000/docs</a> 可查看 FastAPI 自动生成的交互式 OpenAPI 页面。服务启动完成后，<code>GET /health</code> 返回 <code>{"status":"ok"}</code>。</p>
+        <h3>请求：<code>POST /v1/decompose</code></h3>
+        <p><code>intensities</code> 为必填的一维强度数组，最少两个点。<code>two_theta</code> 可选；若省略，服务假定输入在 10–80° 之间等间隔采样。无论原始长度是多少，API 都会插值至 3500 点、裁剪负强度并做最大值归一化。</p>
+        <pre><code>curl -X POST 'http://127.0.0.1:8000/v1/decompose?top_k=3' \
+  -H 'content-type: application/json' \
+  -d '{
+    "two_theta": [10.0, 10.1, 10.2, 10.3, 10.4],
+    "intensities": [0.0, 0.15, 1.0, 0.20, 0.0]
+  }'</code></pre>
+        <table><thead><tr><th>参数</th><th>位置</th><th>含义</th></tr></thead><tbody>
+          <tr><td><code>intensities</code></td><td>JSON body，必填</td><td>测得的 XRD 强度；必须是有限数值，且至少含一个正值。</td></tr>
+          <tr><td><code>two_theta</code></td><td>JSON body，可选</td><td>以度为单位、严格递增；长度必须与 <code>intensities</code> 一致。</td></tr>
+          <tr><td><code>top_k</code></td><td>query，默认 5</td><td>每个分解相返回的候选 <code>mp-id</code> 数，范围 1–20。</td></tr>
+          <tr><td><code>include_patterns</code></td><td>query，默认 false</td><td>设为 true 时，返回每个相完整的 3500 点分解谱。</td></tr>
+        </tbody></table>
+      </section>
+
+      <section id="response" class="card reveal">
+        <h2>结果解释</h2>
+        <pre><code>{
+  "xrd_length": 3500,
+  "two_theta_range": [10.0, 80.0],
+  "phases": [
+    {
+      "phase_index": 0,
+      "active": true,
+      "activity_probability": 0.91,
+      "mp_id": "mp-1001824",
+      "match_score": 0.87,
+      "alternatives": [
+        {"mp_id": "mp-1001824", "match_score": 0.87},
+        {"mp_id": "mp-...", "match_score": 0.81}
+      ],
+      "xrd": null
+    }
+  ]
+}</code></pre>
+        <ul><li><code>active</code>：<code>activity_probability ≥ 0.5</code> 的便捷布尔标记。低活性槽位通常可忽略。</li><li><code>match_score</code>：分解谱与参考理论谱的余弦相似度，越高表示在当前 MP500 候选库中越相近。</li><li><code>alternatives</code>：建议结合前几名、化学成分和实验条件共同判断，而非只依据第一名。</li></ul>
+      </section>
+
+      <section id="limitations" class="card reveal">
+        <h2>使用边界与复现建议</h2>
+        <ul><li>模型和参考库统一使用 10–80° 的 Cu Kα 理论 XRD；请尽量将实验谱校准到兼容的 2θ 范围与辐射条件。</li><li>当前 API 只在 <code>MP500.db</code> 所含候选结构中检索，库外结构仍会被映射到“最接近”的库内候选。</li><li>峰位偏移、择优取向、荧光背景、无定形组分和未知仪器展宽会降低分解与检索可靠性。建议先做背景扣除、波长校正和必要的峰位校准。</li><li>该服务用于候选结构筛选与研究辅助，不应替代 Rietveld 精修、化学分析或人工晶体学确认。</li></ul>
+        <p><span class="tag">来源声明</span> 本项目 fork 自 <a href="https://github.com/Licht0812/XDecomposer">Licht0812/XDecomposer</a>；请在研究使用时同时遵循上游仓库的许可证、引用要求和数据使用条款。</p>
+      </section>
+    </main>
+  </div>
+  <footer>© Asterbin-XDecomposer · 多相 XRD 分解与 MP 结构候选检索 · Author: <a href="https://bin-cao.github.io/" target="_blank" rel="noreferrer">Bin Cao</a></footer>
+  <script>
+    document.documentElement.classList.add('js');
+    const observer = new IntersectionObserver((entries) => entries.forEach(({ target, isIntersecting }) => {
+      if (isIntersecting) { target.classList.add('visible'); observer.unobserve(target); }
+    }), { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach((element) => observer.observe(element));
+  </script>
+</body>
+</html>
