@@ -37,9 +37,37 @@ Run all cells. The notebook uses the local checkpoints and `MP500.db`, then show
 
 ## Run the web API
 
+The API cannot start with Python dependencies alone. Before starting it, make
+sure these model resources are available on your machine:
+
+| Required resource | Default location used by the API |
+| --- | --- |
+| XDecomposer checkpoint | ` checkpoints/sepration/latest.pt` |
+| Pretrained XRD encoder checkpoint | ` checkpoints/pretrain/best_model.pt` |
+| MP500 structures database | `MP500.db` |
+
+The leading space in ` checkpoints` and the spelling `sepration` are
+intentional: they match the paths currently defined in `api/main.py`. The
+checkpoint files and database are not included in a clone that does not
+contain those paths. Obtain them from the project maintainer or place your
+own compatible files at those locations.
+
+If your files are stored elsewhere, pass their absolute paths as environment
+variables instead. This is usually less error-prone than creating a directory
+whose name starts with a space:
+
 ```bash
-pip install fastapi uvicorn
-uvicorn api.main:app --host 0.0.0.0 --port 8000
+python -m pip install fastapi "uvicorn[standard]"
+
+XDECOMPOSER_CHECKPOINT="/absolute/path/latest.pt" \
+XDECOMPOSER_MAE_CHECKPOINT="/absolute/path/best_model.pt" \
+XDECOMPOSER_MATERIALS_DB="/absolute/path/MP500.db" \
+python -m uvicorn api.main:app --host 0.0.0.0 --port 8000
 ```
+
+Replace all three `/absolute/path/...` values. Starting with `python -m`
+ensures the installer and Uvicorn use the same Python environment. If a
+resource is missing, startup stops with `Required model resource not found:`
+followed by the exact path to correct.
 
 Open `http://127.0.0.1:8000/` in a browser. See `api/README.md` for API request examples.

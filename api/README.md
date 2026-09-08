@@ -1,11 +1,48 @@
 # XDecomposer API
 
-Install the two HTTP dependencies, then start the service from the repository root:
+## Prerequisites
+
+Installing FastAPI and Uvicorn alone is not sufficient. The API loads a
+trained model and an MP500 structure database during startup. Have all three
+of the following resources before starting the service:
+
+| Required resource | Default path relative to the repository root |
+| --- | --- |
+| XDecomposer checkpoint | ` checkpoints/sepration/latest.pt` |
+| Pretrained XRD encoder checkpoint | ` checkpoints/pretrain/best_model.pt` |
+| MP500 ASE database | `MP500.db` |
+
+The leading space in ` checkpoints` and the spelling `sepration` are part of
+the current default path in `api/main.py`. These large model/data files may
+not be present in a fresh clone; obtain compatible copies from the project
+maintainer.
+
+## Start the service
+
+From the repository root, install the HTTP dependencies and point the API at
+the three resources. Absolute paths are recommended:
 
 ```bash
-pip install fastapi uvicorn
-uvicorn api.main:app --host 0.0.0.0 --port 8000
+python -m pip install fastapi "uvicorn[standard]"
+
+XDECOMPOSER_CHECKPOINT="/absolute/path/latest.pt" \
+XDECOMPOSER_MAE_CHECKPOINT="/absolute/path/best_model.pt" \
+XDECOMPOSER_MATERIALS_DB="/absolute/path/MP500.db" \
+python -m uvicorn api.main:app --host 0.0.0.0 --port 8000
 ```
+
+Replace every `/absolute/path/...` placeholder. `python -m` makes sure pip
+and Uvicorn use the same Python environment.
+
+Alternatively, place files at the default paths above and run:
+
+```bash
+python -m uvicorn api.main:app --host 0.0.0.0 --port 8000
+```
+
+If startup reports `Required model resource not found: ...`, the path printed
+after the colon is the missing file to supply or correct via the environment
+variables.
 
 Open `http://127.0.0.1:8000/` for the simple browser interface: paste or upload XRD CSV/TXT data, inspect candidate `mp-id` values, download JSON/CSV results, and download each matched structure as CIF. `/docs` remains available for programmatic API debugging.
 
