@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Asterbin-XDecomposer · Documentation</title>
+  <title>XDecomposer · Documentation</title>
   <style>
     :root{--ink:#17212b;--muted:#5d6b78;--line:#dce4ea;--paper:#fff;--canvas:#f5f8fa;--brand:#0c6b66;--navy:#12334a;--gold:#e6a42e}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:var(--ink);background:var(--canvas);font:16px/1.7 Inter,ui-sans-serif,system-ui,sans-serif}a{color:var(--brand)}.hero{background:linear-gradient(125deg,#10354b,#0c716a);color:#fff;padding:70px max(24px,calc((100% - 1040px)/2));position:relative}.language{position:absolute;right:24px;top:20px;color:#fff}.eyebrow{margin:0 0 12px;font-size:.8rem;font-weight:700;letter-spacing:.12em;color:#8fe0d5}.hero h1{max-width:820px;margin:0;font-size:clamp(2.2rem,5vw,4rem);line-height:1.1;letter-spacing:-.04em}.hero p{max-width:740px;color:#d9ecea;font-size:1.1rem}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:25px}.button{display:inline-block;padding:9px 15px;border:1px solid #9ee3db;border-radius:7px;color:#fff;text-decoration:none;font-weight:700}.button.primary{background:#fff;color:#075e5a}.shell{display:grid;grid-template-columns:190px minmax(0,840px);gap:38px;width:min(1080px,calc(100% - 48px));margin:auto;padding:40px 0 70px}.toc{position:sticky;top:18px;align-self:start}.toc a{display:block;padding:5px 0;color:var(--muted);text-decoration:none}.card{margin-bottom:24px;padding:27px;background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 2px 8px #1531470a}.card h2{margin-top:0;font-size:1.55rem}.notice{padding:15px 18px;border-left:4px solid var(--gold);background:#fff8e9}.flow{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;align-items:center;text-align:center}.node{padding:12px 7px;border:1px solid #abd4cf;border-radius:7px;background:#f5fbfa;font-size:.88rem;font-weight:700}.arrow{font-size:1.4rem;color:var(--brand)}pre{overflow:auto;padding:16px;border-radius:8px;background:#102a3d;color:#e9f4f5}code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}table{border-collapse:collapse;width:100%}th,td{padding:9px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{color:var(--muted)}footer{padding:28px;background:#102a3d;color:#d0e0e2;text-align:center}@media(max-width:760px){.shell{display:block;width:min(100% - 32px,840px)}.toc{position:static;display:flex;gap:14px;flex-wrap:wrap;margin-bottom:20px}.flow{grid-template-columns:1fr}.arrow{transform:rotate(90deg)}}
   </style>
@@ -10,7 +10,7 @@
 <body>
   <header class="hero">
     <a class="language" href="index.html">中文</a>
-    <p class="eyebrow">ASTERBIN-XDECOMPOSER · DOCUMENTATION</p>
+    <p class="eyebrow">XDECOMPOSER · DOCUMENTATION</p>
     <h1>From mixed XRD to phase-resolved patterns and MP structure candidates</h1>
     <p>An end-to-end workflow for multiphase powder X-ray diffraction: decompose a mixture, estimate phase activity, retrieve candidate Materials Project structures, and compare experimental profiles with theoretical Bragg peaks.</p>
     <div class="actions"><a class="button primary" href="https://github.com/DeltaGanjiang/XDecomposer/releases">Download weights & MP500.db</a><a class="button" href="https://github.com/DeltaGanjiang/XDecomposer">Source repository</a><a class="button" href="https://github.com/Licht0812/XDecomposer">Upstream XDecomposer</a></div>
@@ -18,8 +18,8 @@
   <div class="shell">
     <nav class="toc"><strong>CONTENTS</strong><a href="#overview">Overview</a><a href="#assets">Assets</a><a href="#architecture">Architecture</a><a href="#training">Training</a><a href="#api">API</a><a href="#results">Results</a><a href="#limits">Limitations</a></nav>
     <main>
-      <section id="overview" class="card"><h2>Overview</h2><p>Asterbin-XDecomposer is forked from <a href="https://github.com/Licht0812/XDecomposer">Licht0812/XDecomposer</a>. This repository adds a deployable FastAPI service, MP structure retrieval, an XRDbench demo, CIF export, and an interactive analysis interface.</p><p class="notice"><strong>Important:</strong> the neural network predicts phase-resolved XRD profiles. The returned <code>mp-id</code> is obtained afterward by matching each predicted profile against the currently loaded reference library; it is not a crystal structure generated directly by the model.</p></section>
-      <section id="assets" class="card"><h2>Weights and structure database</h2><p>Download the published checkpoints and database from <a href="https://github.com/DeltaGanjiang/XDecomposer/releases">GitHub Releases</a>. The default runtime paths are:</p><pre><code>Asterbin-XDecomposer/
+      <section id="overview" class="card"><h2>Overview</h2><p>XDecomposer is forked from <a href="https://github.com/Licht0812/XDecomposer">Licht0812/XDecomposer</a>. This repository adds a deployable FastAPI service, MP structure retrieval, an XRDbench demo, CIF export, and an interactive analysis interface.</p><p class="notice"><strong>Important:</strong> the neural network predicts phase-resolved XRD profiles. The returned <code>mp-id</code> is obtained afterward by matching each predicted profile against the currently loaded reference library; it is not a crystal structure generated directly by the model.</p></section>
+      <section id="assets" class="card"><h2>Weights and structure database</h2><p>Download the published checkpoints and database from <a href="https://github.com/DeltaGanjiang/XDecomposer/releases">GitHub Releases</a>. The default runtime paths are:</p><pre><code>XDecomposer/
 ├──  checkpoints/
 │   ├── pretrain/best_model.pt
 │   └── sepration/latest.pt
@@ -37,6 +37,6 @@ bash scripts/bash_train/run_pretrain.sh</code></pre><h3>2. Multiphase decomposit
       <section id="limits" class="card"><h2>Scope and limitations</h2><ul><li>The default calculation uses Cu Kα and a 10–80° 2θ range.</li><li>Only structures in the active reference bank can be returned; an out-of-library material is mapped to its nearest available candidate.</li><li>Background, peak shifts, preferred orientation, amorphous content, and instrumental broadening can reduce reliability.</li><li>Use this as a candidate-screening tool; confirm assignments with expert analysis and Rietveld refinement.</li></ul><p>This project is forked from the upstream XDecomposer repository. Please follow its license and citation requirements when using this work.</p></section>
     </main>
   </div>
-  <footer>Asterbin-XDecomposer · Multiphase XRD decomposition and MP candidate retrieval</footer>
+  <footer>XDecomposer · Multiphase XRD decomposition and MP candidate retrieval</footer>
 </body>
 </html>

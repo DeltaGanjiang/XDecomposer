@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Asterbin-XDecomposer：多相 XRD 分解、结构检索与 API 使用文档。">
-  <title>Asterbin-XDecomposer · XRD 多相分解</title>
+  <meta name="description" content="XDecomposer：多相 XRD 分解、结构检索与 API 使用文档。">
+  <title>XDecomposer · XRD 多相分解</title>
   <style>
     :root { --ink:#17212b; --muted:#5d6b78; --line:#dce4ea; --paper:#fff; --canvas:#f5f8fa; --brand:#0c6b66; --navy:#12334a; --gold:#e6a42e; }
     * { box-sizing:border-box; } html { scroll-behavior:smooth; } body { margin:0; color:var(--ink); background:radial-gradient(circle at 85% 20%,#def4ef 0,transparent 27rem),var(--canvas); font:16px/1.7 Inter, ui-sans-serif, system-ui, -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; }
@@ -24,7 +24,7 @@
   <header class="hero">
     <a href="en.html" style="position:absolute;right:24px;top:20px;color:#fff;font-weight:700">English</a>
     <div class="hero-inner">
-      <p class="eyebrow">Asterbin-XDecomposer · Documentation</p>
+      <p class="eyebrow">XDecomposer · Documentation</p>
       <h1>从混合 XRD 到相分解与 Materials Project 结构候选</h1>
       <p>面向多相粉末 X 射线衍射的端到端分解模型：输入一条混合衍射谱，输出相级 XRD、相存在概率，以及在 MP500 结构库中的最相似 <code>mp-id</code>。</p>
       <a class="author" href="https://bin-cao.github.io/" target="_blank" rel="noreferrer"><span class="avatar">BC</span><span>Author · Bin Cao <span aria-hidden="true">↗</span></span></a>
@@ -43,7 +43,7 @@
     <main>
       <section id="overview" class="card reveal">
         <h2>项目概览</h2>
-        <p><strong>Asterbin-XDecomposer</strong> 是从 <a href="https://github.com/Licht0812/XDecomposer">Licht0812/XDecomposer</a> fork 而来，并在此仓库中补充了可部署的 FastAPI 推理接口、基于 <code>MP500.db</code> 的结构检索流程及本说明页面。上游项目的目标是对整条多相 XRD 图谱进行盲源分解，而非仅做峰位搜索或物相分类。</p>
+        <p><strong>XDecomposer</strong> 是从 <a href="https://github.com/Licht0812/XDecomposer">Licht0812/XDecomposer</a> fork 而来，并在此仓库中补充了可部署的 FastAPI 推理接口、基于 <code>MP500.db</code> 的结构检索流程及本说明页面。上游项目的目标是对整条多相 XRD 图谱进行盲源分解，而非仅做峰位搜索或物相分类。</p>
         <div class="grid">
           <div class="stat"><strong>3500</strong><span>默认统一 XRD 采样长度</span></div>
           <div class="stat"><strong>最多 4 相</strong><span>当前发布分解 checkpoint 的输出槽位数</span></div>
@@ -54,8 +54,8 @@
 
       <section id="assets" class="card reveal">
         <h2>下载模型权重与结构库</h2>
-        <p>分解 API 需要两个 checkpoint 与一个材料数据库。它们已发布在 <a href="https://github.com/DeltaGanjiang/XDecomposer/releases">Asterbin-XDecomposer Releases</a>。下载后在仓库根目录保留以下相对路径；当前仓库中的目录名为 <code> checkpoints</code>（注意前导空格）。</p>
-        <pre><code>Asterbin-XDecomposer/
+        <p>分解 API 需要两个 checkpoint 与一个材料数据库。它们已发布在 <a href="https://github.com/DeltaGanjiang/XDecomposer/releases">XDecomposer Releases</a>。下载后在仓库根目录保留以下相对路径；当前仓库中的目录名为 <code> checkpoints</code>（注意前导空格）。</p>
+        <pre><code>XDecomposer/
 ├──  checkpoints/
 │   ├── pretrain/best_model.pt       # MAE 预训练配置/编码器权重
 │   └── sepration/latest.pt          # 多相分解模型权重
@@ -163,7 +163,7 @@ uvicorn api.main:app --host 0.0.0.0 --port 8000</code></pre>
       </section>
     </main>
   </div>
-  <footer>© Asterbin-XDecomposer · 多相 XRD 分解与 MP 结构候选检索 · Author: <a href="https://bin-cao.github.io/" target="_blank" rel="noreferrer">Bin Cao</a></footer>
+  <footer>© XDecomposer · 多相 XRD 分解与 MP 结构候选检索 · Author: <a href="https://bin-cao.github.io/" target="_blank" rel="noreferrer">Bin Cao</a></footer>
   <script>
     document.documentElement.classList.add('js');
     const observer = new IntersectionObserver((entries) => entries.forEach(({ target, isIntersecting }) => {

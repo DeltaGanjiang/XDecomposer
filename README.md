@@ -1,4 +1,4 @@
-# Asterbin XDecomposer
+# XDecomposer
 
 XDecomposer separates phases in an experimental X-ray diffraction (XRD) pattern and matches each predicted phase to candidate Materials Project IDs (MP-IDs) from a local structure database.
 
