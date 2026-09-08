@@ -48,9 +48,10 @@ sure these model resources are available on your machine:
 
 The leading space in ` checkpoints` and the spelling `sepration` are
 intentional: they match the paths currently defined in `api/main.py`. The
-checkpoint files and database are not included in a clone that does not
-contain those paths. Obtain them from the project maintainer or place your
-own compatible files at those locations.
+checkpoint files and database are distributed as [GitHub Release assets](https://github.com/DeltaGanjiang/XDecomposer/releases)
+rather than being included in the repository clone. Download the `.pt` files
+and `MP500.db`, then either place them at the default locations or provide
+their downloaded locations below.
 
 If your files are stored elsewhere, pass their absolute paths as environment
 variables instead. This is usually less error-prone than creating a directory

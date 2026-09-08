@@ -14,8 +14,9 @@ of the following resources before starting the service:
 
 The leading space in ` checkpoints` and the spelling `sepration` are part of
 the current default path in `api/main.py`. These large model/data files may
-not be present in a fresh clone; obtain compatible copies from the project
-maintainer.
+not be present in a fresh clone; download the `.pt` checkpoints and
+`MP500.db` from the project's [GitHub Releases assets](https://github.com/DeltaGanjiang/XDecomposer/releases)
+before starting the service.
 
 ## Start the service
 
