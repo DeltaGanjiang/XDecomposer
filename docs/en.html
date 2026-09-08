@@ -13,13 +13,13 @@
     <p class="eyebrow">ASTERBIN-XDECOMPOSER · DOCUMENTATION</p>
     <h1>From mixed XRD to phase-resolved patterns and MP structure candidates</h1>
     <p>An end-to-end workflow for multiphase powder X-ray diffraction: decompose a mixture, estimate phase activity, retrieve candidate Materials Project structures, and compare experimental profiles with theoretical Bragg peaks.</p>
-    <div class="actions"><a class="button primary" href="https://github.com/Asterbin/Asterbin-XDecomposer/releases">Download weights & MP500.db</a><a class="button" href="https://github.com/Asterbin/Asterbin-XDecomposer">Source repository</a><a class="button" href="https://github.com/Licht0812/XDecomposer">Upstream XDecomposer</a></div>
+    <div class="actions"><a class="button primary" href="https://github.com/DeltaGanjiang/XDecomposer/releases">Download weights & MP500.db</a><a class="button" href="https://github.com/DeltaGanjiang/XDecomposer">Source repository</a><a class="button" href="https://github.com/Licht0812/XDecomposer">Upstream XDecomposer</a></div>
   </header>
   <div class="shell">
     <nav class="toc"><strong>CONTENTS</strong><a href="#overview">Overview</a><a href="#assets">Assets</a><a href="#architecture">Architecture</a><a href="#training">Training</a><a href="#api">API</a><a href="#results">Results</a><a href="#limits">Limitations</a></nav>
     <main>
       <section id="overview" class="card"><h2>Overview</h2><p>Asterbin-XDecomposer is forked from <a href="https://github.com/Licht0812/XDecomposer">Licht0812/XDecomposer</a>. This repository adds a deployable FastAPI service, MP structure retrieval, an XRDbench demo, CIF export, and an interactive analysis interface.</p><p class="notice"><strong>Important:</strong> the neural network predicts phase-resolved XRD profiles. The returned <code>mp-id</code> is obtained afterward by matching each predicted profile against the currently loaded reference library; it is not a crystal structure generated directly by the model.</p></section>
-      <section id="assets" class="card"><h2>Weights and structure database</h2><p>Download the published checkpoints and database from <a href="https://github.com/Asterbin/Asterbin-XDecomposer/releases">GitHub Releases</a>. The default runtime paths are:</p><pre><code>Asterbin-XDecomposer/
+      <section id="assets" class="card"><h2>Weights and structure database</h2><p>Download the published checkpoints and database from <a href="https://github.com/DeltaGanjiang/XDecomposer/releases">GitHub Releases</a>. The default runtime paths are:</p><pre><code>Asterbin-XDecomposer/
 ├──  checkpoints/
 │   ├── pretrain/best_model.pt
 │   └── sepration/latest.pt
